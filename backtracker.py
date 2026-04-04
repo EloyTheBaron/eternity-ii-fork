@@ -44,8 +44,11 @@ def reduce_edges(top, down, edges):
                 used.add(edge)
 
     # generate strongly connected component
-    for component in nx.strongly_connected_component_subgraphs(G0):
-        if component.edges():
+    for nodes in nx.strongly_connected_components(G0):
+
+        component = G0.subgraph(nodes)
+
+        if component.number_of_edges():
             for e in component.edges():
                 used.add(e)
         else:
@@ -429,26 +432,35 @@ class Backtracker:
             # we are just putting any piece we can, until we can
             # and then we backtrack
             self.check_feasible(ignore_impossible=True)
-            if self.best_score == -1:
+            if self.best_score == -1 or not self.best_feasible_locations:
                 self.state = self.BACKTRACKING
-            else:
-                i = j = -1
-                piece = None
-                # select place with most neighbours, so that we at least put near
-                # to already filled board
-                most_neighbours = -1
-                best_piece = None
-                best_coord = None
-                for i, j in self.best_feasible_locations:
-                    count = self.board.neighbours_count(i, j)
-                    if count > most_neighbours:
-                        most_neighbours = count
-                        for best_piece in self.feasible_pieces[i, j]:
-                            break
+                return
+            
+            #i = j = -1
+            #piece = None
+
+            # select place with most neighbours, so that we at least put near
+            # to already filled board
+            most_neighbours = -1
+            best_piece = None
+            best_coord = None
+            for i, j in self.best_feasible_locations:
+                count = self.board.neighbours_count(i, j)
+                if count > most_neighbours:
+                    most_neighbours = count
+                    
+                    pieces = self.feasible_pieces[i, j]
+                    if pieces:
+                        best_piece = next(iter(pieces))
                         best_coord = (i, j)
-                        if most_neighbours == 4:
-                            break
-                self.place(best_coord[0], best_coord[1], best_piece)
+
+                    if most_neighbours == 4:
+                        break
+
+            if best_coord is None or best_piece is None:
+                self.state = self.BACKTRACKING
+                return
+            self.place(best_coord[0], best_coord[1], best_piece)
 
         elif self.state == self.BACKTRACKING:
             self.backtrack()
