@@ -1,4 +1,5 @@
 import math
+import os
 from decimal import Decimal
 
 import networkx as nx
@@ -8,6 +9,10 @@ from core.defs import PieceRef, N, E, S, W
 
 class NoSolution(Exception):
     pass
+
+
+def border_positions(board):
+    return list(board.enumerate_corners()) + list(board.enumerate_edges())
 
 
 def reduce_edges(top, down, edges):
@@ -80,7 +85,8 @@ class Backtracker:
                  pieces_map=None,
                  find_all=False,
                  grid_file=None,
-                 rotations_file=None):
+                 rotations_file=None,
+                 save_solutions_dir=None):
         # pre-calculated factorials
         self.fact = [math.factorial(i) for i in range(4 * 256 + 1)]  # 4 times for each rotation
         self.enable_finalizing = enable_finalizing
@@ -96,6 +102,9 @@ class Backtracker:
         self.unvisited = dict()
         self.backtrack_to = 0
         self.state = self.SEARCHING
+        self.save_solutions_dir = save_solutions_dir
+        if self.save_solutions_dir:
+            os.makedirs(self.save_solutions_dir, exist_ok=True)
         for i in range(self.board.puzzle_def.height):
             for j in range(self.board.puzzle_def.width):
                 if not pieces_map or (i, j) in pieces_map:
@@ -473,9 +482,11 @@ class Backtracker:
             if not self.unvisited:
                 if self.find_all:
                     self.counter += 1
+                    self._save_solution()
                     print(f"Next solution found ({self.counter})")
                 else:
-                    # everything already placed, solved...
+                    self.counter += 1
+                    self._save_solution()
                     self.state = self.SOLVED
                     return False
 
@@ -554,6 +565,16 @@ class Backtracker:
             # now we have selected piece to place, do it
             self.place(i, j, best_feasible_piece)
             return True
+
+    def _save_solution(self):
+        if not self.save_solutions_dir:
+            return
+
+        size = f"{self.board.puzzle_def.height}by{self.board.puzzle_def.width}"
+        filename = f"{size}_corners_and_edges_solution_{self.counter}.csv"
+        filepath = os.path.join(self.save_solutions_dir, filename)
+        self.board.save(filepath)
+        print(f"Saved border solution to {filepath}")
 
     def can_be_placed_at(self, piece, i, j):
         if i > 0:

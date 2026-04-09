@@ -1,5 +1,6 @@
 import argparse
 import copy
+import os
 import sys
 import time
 import uuid
@@ -7,7 +8,7 @@ import uuid
 import pygame.locals
 
 from ui import ui
-from backtracker import Backtracker
+from backtracker import Backtracker, border_positions
 from core import board
 from core.defs import PuzzleDefinition
 
@@ -18,6 +19,10 @@ if __name__ == '__main__':
     parser.add_argument('-hints', type=str, required=False, default=None, help='Hint file')
     parser.add_argument('--disable_reducing', action='store_true', required=False, default=False,
                         help='Reducing constraints')
+    parser.add_argument('--border-only', action='store_true', required=False, default=False,
+                        help='Search only edge and corner positions')
+    parser.add_argument('--save-border-solutions', action='store_true', required=False, default=False,
+                        help='Save found border solutions under data/eternity2_like/<size>/corners_and_edges')
     parser.add_argument('-stats', type=str, required=False, default=None, help='Collocation stats file')
     parser.add_argument('-rotations', type=str, required=False, default=None, help='Rotations file')
     args = parser.parse_args()
@@ -35,13 +40,23 @@ if __name__ == '__main__':
     LEFT_BUTTON = 1
     RIGHT_BUTTON = 2
 
+    pieces_map = None
+    save_solutions_dir = None
+    if args.border_only:
+        pieces_map = border_positions(board)
+        if args.save_border_solutions:
+            size_dir = f"{puzzle_def.height}by{puzzle_def.width}"
+            save_solutions_dir = os.path.join("data", "eternity2_like", size_dir, "corners_and_edges")
+
     backtracker = Backtracker(board,
+                              pieces_map=pieces_map,
                               enable_finalizing=False,
                               constraint_reducing=(not args.disable_reducing),
                               connecting=True,
                               grid_file=args.stats,
                               find_all=True,
-                              rotations_file=args.rotations)
+                              rotations_file=args.rotations,
+                              save_solutions_dir=save_solutions_dir)
     start = time.time()
     running_min = 0
     running_sec = 0

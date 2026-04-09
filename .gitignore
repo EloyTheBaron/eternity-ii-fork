@@ -9,3 +9,5 @@ debug/
 build/
 *.user
 *.exe
+
+corners_and_edges/
