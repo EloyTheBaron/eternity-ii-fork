@@ -31,7 +31,7 @@ Ejemplo: Pieza 139 = `[14, 8, 8, 9]` → E=14, S=8, W=8, N=9
 
 Por número de colores "grises" (frontera = 0):
 
-| Tipo | Grises | Ubicación | Cantidad (256x256) | Descrición |
+| Tipo | Grises | Ubicación | Cantidad (16×16) | Descrición |
 |------|--------|-----------|-------------------|------------|
 | **Corner** | 2 | Esquinas | 4 | Dos bordes exteriores |
 | **Edge** | 1 | Bordes | 60 | Un borde exterior |
@@ -51,7 +51,7 @@ Cálculo: `color_efectivo = get_color((posición - rotación) % 4)`
 
 - **Match**: dos piezas adyacentes con colores iguales en el borde común
 - **Puntuación máxima**: `width × (height - 1) + height × (width - 1)` = matches posibles
-  - Para 256x256: 256×255 + 256×255 = **130,560 matches**
+  - Para 16×16: 16×15 + 16×15 = **480 matches**
 
 ---
 
@@ -299,7 +299,7 @@ Intercambia piezas para mejorar score local iterativamente.
 - `RANDOM_RECOVERING`: recuperación aleatoria
 
 #### `backtracking.py` - Fuerza Bruta (Educativo)
-Intenta todas las combinaciones con backtracking. **Muy lento** para 256x256.
+Intenta todas las combinaciones con backtracking. **Muy lento** para 16×16 (y NP-completo).
 
 ```bash
 python backtracking.py -conf data/eternity2/eternity2_256.csv \
@@ -594,7 +594,7 @@ python play.py -conf data/eternity2/eternity2_256.csv \
 ## 📝 FAQ
 
 **P: ¿Por qué el backtracking es tan lento?**
-R: Eternity II es NP-completo. Para 256 piezas hay 256! × 4^256 combinaciones posibles. Backtracking puro solo funciona para puzzles pequeños (<8x8).
+R: Eternity II (16×16 con 256 piezas) es NP-completo. Hay 256! × 4^256 combinaciones posibles. Backtracking puro solo funciona para puzzles pequeños (<8x8).
 
 **P: ¿Cuál algoritmo funciona mejor?**
 R: Depende del puzzle. Para hints con estrategia de reemplazo (replacing) + hill climbing (swapping) da buenos resultados. Para optimización pura, genetic algorithm puede superar a otros.

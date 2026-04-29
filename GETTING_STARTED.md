@@ -109,7 +109,7 @@ Los bordes deben coincidir entre piezas adyacentes
 ```
 S 1234/130560
   ↑     ↑
-  |     └─→ Máximo posible (130,560 bordes coincidentes)
+  |     └─→ Máximo posible (480 bordes coincidentes)
   └────────→ Puntuación actual (bordes que SÍ coinciden)
 ```
 
@@ -309,7 +309,7 @@ La misma pieza girada 0°, 90°, 180° o 270°.
 Cuando dos piezas adyacentes tienen el MISMO color en el borde compartido.
 
 ### Score / Puntuación
-Número total de matches. Máximo = 130,560 para 256×256.
+Número total de matches. Máximo = 480 para 16×16.
 
 ### Hints / Pistas
 4 piezas ya colocadas y rotadas correctamente (para facilitar la resolución).

@@ -220,7 +220,7 @@ python replacing.py -conf puzzle.csv -load manual_save_*.csv -hints ...
 
 ### Puntuación (Score)
 Número de **matches**: bordes adyacentes con el mismo color/patrón.
-- **Máximo 256×256**: 256×255 + 256×255 = **130,560 matches**
+- **Máximo 16×16**: 16×15 + 16×15 = **480 matches**
 
 ### Tipos de Pieza
 - **Corner** (4): dos bordes exteriores
@@ -305,7 +305,7 @@ pip install -r requirements.txt
 
 | Dataset | Tamaño | Piezas | Hints | Locación |
 |---------|--------|--------|-------|----------|
-| Eternity II Original | 256×256 | 65,536 | 4 pistas | `data/eternity2/` |
+| Eternity II Original | 16×16 | 256 | 4 pistas | `data/eternity2/` |
 | Eternity-like (6×6 a 16×16) | Varios | 36-256 | 0-10 | `data/eternity2_like/` |
 | Generados | 3×3 a 10×10 | 9-100 | Varios | `data/generated_*/` |
 

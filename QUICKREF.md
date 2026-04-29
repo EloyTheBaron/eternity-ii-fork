@@ -151,7 +151,7 @@ TYPE_INNER = 2   # 0 grises
 ```
 data/
   eternity2/
-    eternity2_256.csv              ← Puzzle original 256x256
+    eternity2_256.csv              ← Puzzle original (16×16, 256 piezas)
     eternity2_256_hints.csv        ← Pistas del original
 ```
 
@@ -223,44 +223,18 @@ print(f"Pieza 139 en ({ref1.i}, {ref1.j}) con rotación {ref1.dir}")
 ```
 Definición: Número de matches (bordes coincidentes) entre piezas adyacentes
 Máximo: width × (height - 1) + height × (width - 1)
-Para 256x256: 130,560 matches
+Para 16×16: 480 matches
 
-Fórmula puzzle 256x256:
-  max_score = 256 × 255 + 256 × 255 = 65,280 + 65,280 = 130,560
+Fórmula puzzle 16×16:
+  max_score = 16 × 15 + 16 × 15 = 240 + 240 = 480
 ```
 
-### Tipos de Pieza (256x256)
+### Tipos de Pieza (Eternity II 16×16)
 ```
 Corners: 4
-Edges: 2×(256-2) + 2×(256-2) = 2×254 + 2×254 = 508 + 508 = 1,016 - wait, that's wrong
-        Actually: 4 × 254 = 1,016 - no
-        
-Let me recalculate:
-  Top: 256 - 2 = 254 edges
-  Bottom: 256 - 2 = 254 edges
-  Left: 256 - 2 = 254 edges
-  Right: 256 - 2 = 254 edges
-  Total: 254 × 4 = 1,016 ... no
-  
-Actually for 256x256:
-  Edges on top: 256 - 2 = 254
-  Edges on right: 256 - 2 = 254
-  Edges on bottom: 256 - 2 = 254
-  Edges on left: 256 - 2 = 254
-  Total edges: 254 + 254 + 254 + 254 = 1,016 ... still wrong
-  
-Correct formula:
-  edges_count = 2 × (height - 2) + 2 × (width - 2)
-              = 2 × (256 - 2) + 2 × (256 - 2)
-              = 2 × 254 + 2 × 254
-              = 508 + 508
-              = 1,016
-
-Wait, that's edges total, but let me verify:
-  Perimeter edges (excluding corners): 4 × 254 = 1,016 ✓
-
-Inner:  (256 - 2) × (256 - 2) = 254 × 254 = 64,516
-Total: 4 + 1,016 + 64,516 = 65,536 ✓ (256²)
+Edges: 2 × (16 - 2) + 2 × (16 - 2) = 2 × 14 + 2 × 14 = 56
+Inner: (16 - 2) × (16 - 2) = 14 × 14 = 196
+Total: 4 + 56 + 196 = 256 ✓
 ```
 
 ---
@@ -409,9 +383,9 @@ Analyzer (analyze.py, validate.py)
 | 6×6 | 36 | Posible | ~10s |
 | 8×8 | 64 | Difícil | ~60s |
 | 10×10 | 100 | Muy difícil | ~5min |
-| 256×256 | 65,536 | Intractable (sin hints) | → ∞ |
+| 16×16 | 256 | Intractable (sin hints) | → ∞ |
 
-*Con hints, 256×256 es resoluble con buena estrategia*
+*Con hints, 16×16 (Eternity II) es resoluble con buena estrategia*
 
 ---
 
