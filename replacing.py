@@ -6,6 +6,7 @@ import copy
 import random
 import uuid
 import pygame
+import pygame.locals
 from core.defs import PuzzleDefinition, PieceRef, N, E, S, W, TYPE_CORNER, TYPE_EDGE
 from ui import ui
 from core import board
